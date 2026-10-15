@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambridge IELTS Academic 18 - Test 1 Writing Examination</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js and FontAwesome CDN for academic visual aids -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --oxford-crimson: #731317;
+      --oxford-dark: #1b263b;
+      --cambridge-cream: #fbf9f4;
+      --paper-border: #d4cdc5;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
+      background-color: #f4efe6;
+      color: #1a1a1a;
+      line-height: 1.5;
+    }
+
+    .tnr {
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    /* Academic document paper texture effect */
+    .exam-paper {
+      background-color: #ffffff;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid #ddd2c4;
+    }
+
+    /* Custom scrollbar for academic aesthetic */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1ede6;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b5a999;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8b262a;
+    }
+
+    /* Cambridge banner styling */
+    .cambridge-banner {
+      background: linear-gradient(135deg, #1b263b 0%, #0d1b2a 100%);
+      border-bottom: 3px solid #731317;
+    }
+
+    .tab-btn.active {
+      background-color: #731317;
+      color: #ffffff;
+      border-color: #731317;
+    }
+
+    .tab-btn {
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* Custom line chart SVG interactive effects */
+    .chart-line {
+      transition: stroke-width 0.25s, opacity 0.25s;
+    }
+    .chart-line:hover {
+      stroke-width: 4.5 !important;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    .chart-dot {
+      transition: r 0.2s, fill 0.2s;
+      cursor: pointer;
+    }
+    .chart-dot:hover {
+      r: 6.5;
+    }
+
+    /* Elegant modal backdrop */
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-900 selection:text-white">
+
+  <header class="cambridge-banner text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded border border-amber-200/40 bg-red-900/60 flex items-center justify-center font-bold text-lg text-amber-200 shadow-inner">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Cambridge Assessment English</span>
+            <span class="text-xs text-gray-300">| Academic 18 &bull; Test 1</span>
+          </div>
+          <h1 class="text-lg md:text-xl font-bold tracking-tight text-white">IELTS Academic Writing Simulation & Diagnostic Evaluator</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 bg-slate-900/80 px-4 py-1.5 rounded-md border border-slate-700 shadow-inner">
+        <div class="text-center">
+          <span class="text-[10px] uppercase tracking-wider block text-gray-400">Total Exam Time</span>
+          <div id="exam-timer" class="text-2xl font-bold text-amber-400 font-mono tracking-wider">60:00</div>
+        </div>
+
+        <div class="flex items-center space-x-1 border-l border-slate-700 pl-3">
+          <button id="timer-toggle-btn" onclick="toggleTimer()" title="Pause/Resume Timer" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded text-gray-200 flex items-center gap-1">
+            <i id="timer-icon" class="fa-solid fa-pause"></i>
+            <span id="timer-status">Pause</span>
+          </button>
+          <button onclick="resetTimer()" title="Reset 60 Mins" class="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 rounded text-gray-300">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+
+        <button onclick="submitExamination()" class="ml-2 bg-[#731317] hover:bg-[#8e171c] text-white px-4 py-1.5 rounded shadow text-sm font-semibold tracking-wide flex items-center gap-1.5 border border-red-700/60">
+          <i class="fa-solid fa-file-circle-check"></i>
+          <span>Submit & Grade</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-grow">
+    
+    <!-- Instruction bar & Fast Test Helper -->
+    <div class="mb-5 bg-[#f5ede0] border-l-4 border-[#731317] p-3 rounded-r flex flex-wrap justify-between items-center text-xs md:text-sm text-stone-800 shadow-sm gap-2">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-[#731317] text-base"></i>
+        <span><strong>Official Timing Guidelines:</strong> Spend approximately <strong>20 minutes</strong> on Task 1 (≥ 150 words) and <strong>40 minutes</strong> on Task 2 (≥ 250 words). Total examination allowance is 60 minutes.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="loadSampleDrafts()" class="text-xs bg-stone-200 hover:bg-stone-300 text-stone-800 px-3 py-1 rounded border border-stone-400 transition" title="Insert Cambridge sample response to preview automated grading">
+          <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Load Exemplar Drafts
+        </button>
+        <button onclick="clearAllDrafts()" class="text-xs bg-stone-100 hover:bg-red-50 text-red-700 px-2.5 py-1 rounded border border-stone-300 transition" title="Clear text areas">
+          <i class="fa-regular fa-trash-can mr-1"></i> Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="flex border-b border-stone-300 mb-6 bg-stone-100/70 p-1 rounded-t-lg">
+      <button id="btn-tab-task1" onclick="switchTask(1)" class="tab-btn active px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2">
+        <span class="w-5 h-5 rounded-full bg-white/20 text-xs flex items-center justify-center">1</span>
+        <span>Task 1: Asian Urban Demographics (1970–2040)</span>
+        <span id="badge-t1-wc" class="ml-1 text-[11px] font-normal px-2 py-0.5 rounded-full bg-black/20">0 words</span>
+      </button>
+
+      <button id="btn-tab-task2" onclick="switchTask(2)" class="tab-btn text-stone-700 hover:text-stone-900 px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 border-transparent">
+        <span class="w-5 h-5 rounded-full bg-stone-300 text-stone-800 text-xs flex items-center justify-center">2</span>
+        <span>Task 2: Science & Human Welfare Essay</span>
+        <span id="badge-t2-wc" class="ml-1 text-[11px] font-normal px-2 py-0.5 rounded-full bg-stone-200 text-stone-700">0 words</span>
+      </button>
+
+      <button id="btn-tab-benchmarks" onclick="switchTask(3)" class="tab-btn text-stone-700 hover:text-stone-900 px-5 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 border-transparent ml-auto">
+        <i class="fa-solid fa-book-open-reader text-amber-800"></i>
+        <span>Cambridge 18 Model Reference</span>
+      </button>
+    </div>
+
+    <div id="section-task1" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left Column: Task 1 Prompt & Chart Graphic -->
+      <div class="lg:col-span-6 flex flex-col gap-4">
+        <div class="exam-paper p-5 rounded-lg">
+          <div class="flex justify-between items-center border-b border-stone-200 pb-2 mb-3">
+            <span class="text-xs uppercase font-bold tracking-widest text-[#731317]">IELTS Writing Task 1</span>
+            <span class="text-xs text-stone-500 italic">Recommended: 20 minutes | At least 150 words</span>
+          </div>
+
+          <div class="border border-stone-800 p-4 bg-stone-50/50 rounded mb-4 text-stone-900 text-sm italic">
+            <p class="font-semibold mb-2 not-italic text-stone-950">You should spend about 20 minutes on this task.</p>
+            <p class="mb-2">The graph below gives information about the percentage of the population in four Asian countries living in cities from 1970 to 2020, with predictions for 2030 and 2040.</p>
+            <p class="font-semibold not-italic text-stone-900">Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+            <p class="mt-2 font-normal text-xs text-stone-700">Write at least 150 words.</p>
+          </div>
+
+          <!-- Line Graph Visual Title -->
+          <h2 class="text-center font-bold text-base md:text-lg text-stone-900 mb-1">
+            Percentage of the population living in cities
+          </h2>
+          <p class="text-center text-xs text-stone-500 mb-3">(Four Asian nations: 1970–2040)</p>
+
+          <div class="relative bg-white border border-stone-300 p-2 rounded shadow-inner">
+            <svg id="academic-line-chart" viewBox="0 0 540 340" class="w-full h-auto" style="font-family: 'Times New Roman', serif;">
+              <!-- Background gridlines -->
+              <defs>
+                <pattern id="grid" width="60" height="30" patternUnits="userSpaceOnUse">
+                  <path d="M 60 0 L 0 0 0 30" fill="none" stroke="#f0ede8" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect x="55" y="20" width="455" height="250" fill="#faf9f6" stroke="#c4bebb"/>
+
+              <!-- Horizontal Grid Lines & Y-axis labels (0 to 90) -->
+              <!-- 90% is y=20, 0% is y=270, height=250. Every 10% = 250/9 = 27.77px -->
+              <g stroke="#e2ded9" stroke-width="1">
+                <line x1="55" y1="20" x2="510" y2="20" stroke="#d5d0ca"/>
+                <line x1="55" y1="47.78" x2="510" y2="47.78"/>
+                <line x1="55" y1="75.56" x2="510" y2="75.56"/>
+                <line x1="55" y1="103.33" x2="510" y2="103.33"/>
+                <line x1="55" y1="131.11" x2="510" y2="131.11"/>
+                <line x1="55" y1="158.89" x2="510" y2="158.89"/>
+                <line x1="55" y1="186.67" x2="510" y2="186.67"/>
+                <line x1="55" y1="214.44" x2="510" y2="214.44"/>
+                <line x1="55" y1="242.22" x2="510" y2="242.22"/>
+                <line x1="55" y1="270" x2="510" y2="270" stroke="#777"/>
+              </g>
+
+              <!-- Y-Axis Ticks & Labels -->
+              <g font-size="11" text-anchor="end" fill="#222">
+                <text x="48" y="24">90</text>
+                <text x="48" y="52">80</text>
+                <text x="48" y="80">70</text>
+                <text x="48" y="107">60</text>
+                <text x="48" y="135">50</text>
+                <text x="48" y="163">40</text>
+                <text x="48" y="191">30</text>
+                <text x="48" y="218">20</text>
+                <text x="48" y="246">10</text>
+                <text x="48" y="274">0</text>
+              </g>
+
+              <!-- Y-Axis Vertical Label -->
+              <text transform="rotate(-90)" x="-150" y="15" font-size="12" font-weight="bold" fill="#111" text-anchor="middle">
+                Percentage (%) of total population
+              </text>
+
+              <!-- X-Axis Years: 1970 to 2040 (8 intervals -> step = 455 / 7 = 65px) -->
+              <!-- 1970=55, 1980=120, 1990=185, 2000=250, 2010=315, 2020=380, 2030=445, 2040=510 -->
+              <g font-size="11" text-anchor="middle" fill="#222">
+                <text x="55" y="288">1970</text>
+                <text x="120" y="288">1980</text>
+                <text x="185" y="288">1990</text>
+                <text x="250" y="288">2000</text>
+                <text x="315" y="288">2010</text>
+                <text x="380" y="288">2020</text>
+                <text x="445" y="288">2030</text>
+                <text x="510" y="288">2040</text>
+                <text x="282" y="306" font-size="13" font-weight="bold">Year</text>
+              </g>
+
+              <!-- Formula for y: y = 270 - (val / 90 * 250) -->
+
+              <!-- Malaysia: 1970:30% (y=186.7), 1980:40% (y=158.9), 1990:46% (y=142.2), 2000:60% (y=103.3), 2010:71% (y=72.8), 2020:77% (y=56.1), 2030:82% (y=42.2), 2040:84% (y=36.7) -->
+              <path id="path-malaysia" class="chart-line" fill="none" stroke="#2b5c8f" stroke-width="2.5" stroke-dasharray="2 3"
+                    d="M 55,186.7 L 120,158.9 L 185,142.2 L 250,103.3 L 315,72.8 L 380,56.1 L 445,42.2 L 510,36.7" />
+
+              <!-- Philippines: 1970:32% (y=181.1), 1980:34% (y=175.6), 1990:48% (y=136.7), 2000:46% (y=142.2), 2010:42% (y=153.3), 2020:45% (y=145.0), 2030:50% (y=131.1), 2040:56% (y=114.4) -->
+              <path id="path-philippines" class="chart-line" fill="none" stroke="#731317" stroke-width="2.2" stroke-dasharray="6 3 2 3"
+                    d="M 55,181.1 L 120,175.6 L 185,136.7 L 250,142.2 L 315,153.3 L 380,145.0 L 445,131.1 L 510,114.4" />
+
+              <!-- Indonesia: 1970:13% (y=233.9), 1980:17% (y=222.8), 1990:25% (y=200.6), 2000:30% (y=186.7), 2010:42% (y=153.3), 2020:52% (y=125.6), 2030:60% (y=103.3), 2040:64% (y=92.2) -->
+              <path id="path-indonesia" class="chart-line" fill="none" stroke="#1b6e40" stroke-width="2.5"
+                    d="M 55,233.9 L 120,222.8 L 185,200.6 L 250,186.7 L 315,153.3 L 380,125.6 L 445,103.3 L 510,92.2" />
+
+              <!-- Thailand: 1970:18% (y=220.0), 1980:23% (y=206.1), 1990:30% (y=186.7), 2000:30% (y=186.7), 2010:32% (y=181.1), 2020:33% (y=178.3), 2030:40% (y=158.9), 2040:50% (y=131.1) -->
+              <path id="path-thailand" class="chart-line" fill="none" stroke="#c05621" stroke-width="2.2" stroke-dasharray="7 4"
+                    d="M 55,220.0 L 120,206.1 L 185,186.7 L 250,186.7 L 315,181.1 L 380,178.3 L 445,158.9 L 510,131.1" />
+
+              <!-- Malaysia points (Diamonds) -->
+              <g fill="#ffffff" stroke="#2b5c8f" stroke-width="1.8">
+                <circle cx="55" cy="186.7" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 1970: 30%')" onmouseout="hideTip()"/>
+                <circle cx="120" cy="158.9" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 1980: 40%')" onmouseout="hideTip()"/>
+                <circle cx="185" cy="142.2" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 1990: 46%')" onmouseout="hideTip()"/>
+                <circle cx="250" cy="103.3" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 2000: 60%')" onmouseout="hideTip()"/>
+                <circle cx="315" cy="72.8" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 2010: 71%')" onmouseout="hideTip()"/>
+                <circle cx="380" cy="56.1" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 2020: 77%')" onmouseout="hideTip()"/>
+                <circle cx="445" cy="42.2" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 2030 (proj): 82%')" onmouseout="hideTip()"/>
+                <circle cx="510" cy="36.7" r="4" class="chart-dot" onmouseover="showTip(evt, 'Malaysia 2040 (proj): 84%')" onmouseout="hideTip()"/>
+              </g>
+
+              <!-- Philippines points (Filled squares) -->
+              <g fill="#731317">
+                <rect x="52" y="178.1" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 1970: 32%')" onmouseout="hideTip()"/>
+                <rect x="117" y="172.6" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 1980: 34%')" onmouseout="hideTip()"/>
+                <rect x="182" y="133.7" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 1990: 48%')" onmouseout="hideTip()"/>
+                <rect x="247" y="139.2" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 2000: 46%')" onmouseout="hideTip()"/>
+                <rect x="312" y="150.3" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 2010: 42%')" onmouseout="hideTip()"/>
+                <rect x="377" y="142.0" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 2020: 45%')" onmouseout="hideTip()"/>
+                <rect x="442" y="128.1" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 2030 (proj): 50%')" onmouseout="hideTip()"/>
+                <rect x="507" y="111.4" width="6" height="6" class="chart-dot" onmouseover="showTip(evt, 'Philippines 2040 (proj): 56%')" onmouseout="hideTip()"/>
+              </g>
+
+              <!-- Indonesia points (Triangles) -->
+              <g fill="#1b6e40">
+                <polygon points="55,229 59,237 51,237" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 1970: 13%')" onmouseout="hideTip()"/>
+                <polygon points="120,218 124,226 116,226" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 1980: 17%')" onmouseout="hideTip()"/>
+                <polygon points="185,196 189,204 181,204" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 1990: 25%')" onmouseout="hideTip()"/>
+                <polygon points="250,182 254,190 246,190" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 2000: 30%')" onmouseout="hideTip()"/>
+                <polygon points="315,149 319,157 311,157" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 2010: 42%')" onmouseout="hideTip()"/>
+                <polygon points="380,121 384,129 376,129" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 2020: 52%')" onmouseout="hideTip()"/>
+                <polygon points="445,99 449,107 441,107" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 2030 (proj): 60%')" onmouseout="hideTip()"/>
+                <polygon points="510,88 514,96 506,96" class="chart-dot" onmouseover="showTip(evt, 'Indonesia 2040 (proj): 64%')" onmouseout="hideTip()"/>
+              </g>
+
+              <!-- Thailand points (Crosses) -->
+              <g stroke="#c05621" stroke-width="2">
+                <g onmouseover="showTip(evt, 'Thailand 1970: 18%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="52" y1="217" x2="58" y2="223"/><line x1="58" y1="217" x2="52" y2="223"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 1980: 23%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="117" y1="203" x2="123" y2="209"/><line x1="123" y1="203" x2="117" y2="209"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 1990: 30%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="182" y1="183.7" x2="188" y2="189.7"/><line x1="188" y1="183.7" x2="182" y2="189.7"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 2000: 30%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="247" y1="183.7" x2="253" y2="189.7"/><line x1="253" y1="183.7" x2="247" y2="189.7"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 2010: 32%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="312" y1="178.1" x2="318" y2="184.1"/><line x1="318" y1="178.1" x2="312" y2="184.1"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 2020: 33%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="377" y1="175.3" x2="383" y2="181.3"/><line x1="383" y1="175.3" x2="377" y2="181.3"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 2030 (proj): 40%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="442" y1="155.9" x2="448" y2="161.9"/><line x1="448" y1="155.9" x2="442" y2="161.9"/>
+                </g>
+                <g onmouseover="showTip(evt, 'Thailand 2040 (proj): 50%')" onmouseout="hideTip()" class="chart-dot">
+                  <line x1="507" y1="128.1" x2="513" y2="134.1"/><line x1="513" y1="128.1" x2="507" y2="134.1"/>
+                </g>
+              </g>
+            </svg>
+
+            <!-- Interactive Tooltip Overlay -->
+            <div id="chart-tooltip" class="absolute hidden bg-slate-900 text-white text-xs px-2.5 py-1 rounded shadow-lg pointer-events-none border border-slate-700 z-30">
+            </div>
+          </div>
+
+          <!-- Chart Legend mimicking the Cambridge booklet -->
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs border-t border-stone-200 pt-2.5">
+            <div class="flex items-center gap-1.5 cursor-pointer hover:opacity-75" onclick="toggleTrace('path-philippines')">
+              <span class="inline-block w-4 h-0.5 bg-[#731317] border-t border-dashed border-[#731317]"></span>
+              <span class="w-2.5 h-2.5 bg-[#731317] inline-block"></span>
+              <span class="font-semibold text-stone-800">Philippines</span>
+            </div>
+            <div class="flex items-center gap-1.5 cursor-pointer hover:opacity-75" onclick="toggleTrace('path-malaysia')">
+              <span class="inline-block w-4 h-0.5 bg-[#2b5c8f] border-t border-dotted border-[#2b5c8f]"></span>
+              <span class="w-2.5 h-2.5 rounded-full border border-[#2b5c8f] bg-white inline-block"></span>
+              <span class="font-semibold text-stone-800">Malaysia</span>
+            </div>
+            <div class="flex items-center gap-1.5 cursor-pointer hover:opacity-75" onclick="toggleTrace('path-thailand')">
+              <span class="inline-block w-4 h-0.5 bg-[#c05621] border-t border-dashed border-[#c05621]"></span>
+              <span class="text-[#c05621] font-bold text-xs">&times;</span>
+              <span class="font-semibold text-stone-800">Thailand</span>
+            </div>
+            <div class="flex items-center gap-1.5 cursor-pointer hover:opacity-75" onclick="toggleTrace('path-indonesia')">
+              <span class="inline-block w-4 h-0.5 bg-[#1b6e40]"></span>
+              <span class="text-[#1b6e40] text-xs font-bold">&Delta;</span>
+              <span class="font-semibold text-stone-800">Indonesia</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-stone-500 italic mt-1 text-center">Click on legends to toggle or hover points to view precise percentages.</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 flex flex-col">
+        <div class="exam-paper p-5 rounded-lg flex flex-col h-full">
+          <div class="flex justify-between items-center border-b border-stone-200 pb-2 mb-2">
+            <label for="task1-essay" class="font-bold text-base text-stone-900 flex items-center gap-2">
+              <i class="fa-solid fa-pen-nib text-[#731317]"></i>
+              <span>Candidate Answer Sheet &bull; Task 1</span>
+            </label>
+            <div class="flex items-center gap-3 text-xs">
+              <span id="task1-word-count-badge" class="px-2.5 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                Words: 0 / 150
+              </span>
+            </div>
+          </div>
+
+          <p class="text-xs text-stone-500 italic mb-2">
+            Write your response below. Ensure you present an overall trend, compare main groupings, and accurately report historical figures alongside future forecasts.
+          </p>
+
+          <textarea id="task1-essay" 
+                    oninput="updateCounts()" 
+                    placeholder="The line graph illustrates the percentage of urban dwellers across four Asian countries (Malaysia, the Philippines, Thailand, and Indonesia) from 1970 to 2020, with projected figures up to 2040...&#10;&#10;Overall, all four countries are projected to experience an increase in their urban population proportions..." 
+                    class="w-full flex-grow min-h-[380px] p-4 text-base bg-stone-50/40 border border-stone-300 rounded focus:outline-none focus:ring-2 focus:ring-[#731317]/50 focus:border-[#731317] font-serif leading-relaxed text-stone-900 resize-y"></textarea>
+
+          <!-- Realtime Task 1 Writing Metrics -->
+          <div class="mt-3 pt-3 border-t border-stone-200 flex flex-wrap justify-between items-center text-xs text-stone-600 gap-2">
+            <div class="flex gap-4">
+              <span>Paragraphs: <strong id="t1-paras" class="text-stone-900">0</strong></span>
+              <span>Sentences: <strong id="t1-sentences" class="text-stone-900">0</strong></span>
+              <span>Avg Sentence: <strong id="t1-avg-sent" class="text-stone-900">0</strong> words</span>
+            </div>
+            <div id="t1-target-status" class="text-red-700 font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>Below 150 words requirement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-task2" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left Column: Task 2 Prompt & Prompt Analysis -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        <div class="exam-paper p-5 rounded-lg">
+          <div class="flex justify-between items-center border-b border-stone-200 pb-2 mb-3">
+            <span class="text-xs uppercase font-bold tracking-widest text-[#731317]">IELTS Writing Task 2</span>
+            <span class="text-xs text-stone-500 italic">Recommended: 40 minutes | At least 250 words</span>
+          </div>
+
+          <div class="border border-stone-800 p-4 bg-stone-50/50 rounded mb-4 text-stone-900 text-sm">
+            <p class="font-semibold mb-2 text-stone-950">You should spend about 40 minutes on this task.</p>
+            <p class="mb-3 text-stone-800">Write about the following topic:</p>
+
+            <!-- Formal IELTS Question Box -->
+            <div class="bg-white border-2 border-stone-800 p-4 rounded text-base font-medium italic my-3 text-stone-950 shadow-sm leading-relaxed">
+              "The most important aim of science should be to improve people's lives.<br>
+              To what extent do you agree or disagree with this statement?"
+            </div>
+
+            <p class="text-stone-800 mt-2">Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+            <p class="mt-2 font-bold text-xs text-stone-900">Write at least 250 words.</p>
+          </div>
+
+          <!-- Academic Prompt Decomposition & Advice -->
+          <div class="bg-amber-50/80 border border-amber-300/80 rounded p-3 text-xs text-amber-900 leading-normal">
+            <h3 class="font-bold uppercase tracking-wider text-amber-950 flex items-center gap-1.5 mb-1.5">
+              <i class="fa-solid fa-lightbulb text-amber-700"></i>
+              <span>Cambridge Examiner Analysis Points:</span>
+            </h3>
+            <ul class="list-disc ml-4 space-y-1 text-stone-800">
+              <li><strong>Core Proposition:</strong> Is human societal welfare the <em>primary/exclusive</em> justification for scientific endeavor?</li>
+              <li><strong>Nuance & Extent:</strong> High-scoring candidates typically balance utilitarian humanitarian goals (medicine, engineering, agriculture) against pure theoretical discovery, curiosity, and serendipitous discoveries (e.g., penicillin, atomic physics, cosmic exploration).</li>
+              <li><strong>Pitfall:</strong> Avoid repetitive lists of inventions; analyze the underlying philosophical and practical <em>aims</em>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 flex flex-col">
+        <div class="exam-paper p-5 rounded-lg flex flex-col h-full">
+          <div class="flex justify-between items-center border-b border-stone-200 pb-2 mb-2">
+            <label for="task2-essay" class="font-bold text-base text-stone-900 flex items-center gap-2">
+              <i class="fa-solid fa-feather-pointed text-[#731317]"></i>
+              <span>Candidate Answer Sheet &bull; Task 2</span>
+            </label>
+            <div class="flex items-center gap-3 text-xs">
+              <span id="task2-word-count-badge" class="px-2.5 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                Words: 0 / 250
+              </span>
+            </div>
+          </div>
+
+          <p class="text-xs text-stone-500 italic mb-2">
+            Write your essay below. Present a clear stance, structured paragraphs (Introduction, Body Paragraphs, and Conclusion), and cohesive justification.
+          </p>
+
+          <textarea id="task2-essay" 
+                    oninput="updateCounts()" 
+                    placeholder="While a significant proportion of contemporary society argues that scientific research ought solely to serve human welfare, others contend that curiosity-driven exploration and the expansion of foundational knowledge are equally legitimate objectives...&#10;&#10;In my view, while advancing human wellbeing remains a vital ethical pillar, the unpredictable nature of breakthrough discoveries necessitates that pure intellectual exploration also be considered a primary objective..." 
+                    class="w-full flex-grow min-h-[420px] p-4 text-base bg-stone-50/40 border border-stone-300 rounded focus:outline-none focus:ring-2 focus:ring-[#731317]/50 focus:border-[#731317] font-serif leading-relaxed text-stone-900 resize-y"></textarea>
+
+          <!-- Realtime Task 2 Metrics -->
+          <div class="mt-3 pt-3 border-t border-stone-200 flex flex-wrap justify-between items-center text-xs text-stone-600 gap-2">
+            <div class="flex gap-4">
+              <span>Paragraphs: <strong id="t2-paras" class="text-stone-900">0</strong></span>
+              <span>Sentences: <strong id="t2-sentences" class="text-stone-900">0</strong></span>
+              <span>Avg Sentence: <strong id="t2-avg-sent" class="text-stone-900">0</strong> words</span>
+            </div>
+            <div id="t2-target-status" class="text-red-700 font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>Below 250 words requirement</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-benchmarks" class="hidden space-y-6">
+      <div class="exam-paper p-6 rounded-lg">
+        <div class="border-b-2 border-[#731317] pb-3 mb-5 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h2 class="text-xl font-bold text-stone-900">Cambridge 18 Official Test 1 Benchmarks & Examiner Insights</h2>
+            <p class="text-xs text-stone-600 italic">Pedagogical evaluation comparing authentic student band performance against examiner model responses.</p>
+          </div>
+          <span class="px-3 py-1 bg-stone-100 border border-stone-300 rounded text-xs font-semibold text-stone-700">Official Resource Bank Analysis</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Task 1 Sample Analysis (Band 6.0 candidate breakdown) -->
+          <div class="bg-stone-50 border border-stone-300 rounded-lg p-4">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2 mb-3">
+              <span class="font-bold text-sm text-[#731317] uppercase tracking-wider">Task 1: Candidate Sample (Band 6.0)</span>
+              <span class="bg-amber-100 text-amber-900 border border-amber-300 text-xs px-2 py-0.5 rounded font-bold">Band 6.0</span>
+            </div>
+
+            <div class="text-xs text-stone-700 space-y-2 italic bg-white p-3 rounded border border-stone-200 max-h-56 overflow-y-auto mb-3">
+              <p>The line graph illustrates the proportion of urban citizens in Philippines, Malaysia, Thailand and Indonesia between 1970 and 2020, with the expected population in 2030 and 2040.</p>
+              <p>Overall, it can be easily seen that all four countries has a dramatic rise in population, starting at the lowest point in 1970 and being projected to reach the peak in 2040.</p>
+              <p>Malaysia and Indonesia saw a slightly rise in population, respectively from 30 to about 45 and around 12 to over 20 percent from 1970 to 1990. After that, both countries has climbed rapidly until now before being predicted to continue increasing for the next 20 years.</p>
+              <p>After almost remaining in the 70s, Philippines percentage increased dramatically to reach about 47 percent on 1990 and dropped to 40% in 2010... Meanwhile, Thailand reached approximate 30% in 1990 and saw not much changes until 2020...</p>
+            </div>
+
+            <h4 class="font-bold text-xs uppercase text-stone-900 mb-1">Official Examiner Commentary & Critique:</h4>
+            <ul class="text-xs text-stone-800 space-y-1 list-disc ml-4">
+              <li><strong>Task Achievement:</strong> Covers the basic requirements with a visible overview and key features presented. However, data points after 1990 lack fine detail.</li>
+              <li><strong>Coherence & Cohesion:</strong> Information is logical, grouping countries by pattern (Malaysia/Indonesia then Thailand/Philippines), using linkers like <em>Overall, After that, Meanwhile</em>, though some redundancies occur ("both two").</li>
+              <li><strong>Lexical Resource:</strong> Good range with some less common phrases ("proportion", "projected to reach the peak"), but suffers from word class confusions ("slightly rise" instead of "slight rise", "approximate 30%").</li>
+              <li><strong>Grammar:</strong> Mix of complex structures, but subject-verb agreement slips ("four countries has") and preposition errors ("on 1990").</li>
+            </ul>
+          </div>
+
+          <!-- Task 2 Model Analysis (Band 8.5+ Examiner Model) -->
+          <div class="bg-stone-50 border border-stone-300 rounded-lg p-4">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2 mb-3">
+              <span class="font-bold text-sm text-[#731317] uppercase tracking-wider">Task 2: Examiner Exemplar (Band 8.5+)</span>
+              <span class="bg-green-100 text-green-900 border border-green-300 text-xs px-2 py-0.5 rounded font-bold">Band 8.5+</span>
+            </div>
+
+            <div class="text-xs text-stone-700 space-y-2 italic bg-white p-3 rounded border border-stone-200 max-h-56 overflow-y-auto mb-3">
+              <p>Scientific developments are occurring at a great rate but some of them do not seem to be of help to people. In fact, sometimes scientific innovations are regretted by those who invented them. This essay will argue that science should never harm people but scientists should aim to further their understanding as much as to improve people's lives.</p>
+              <p>On one hand, there is a strong argument that the public good should be the top priority for scientists. They are the ones who have the potential to make discoveries and invent things that can change the world. Electricity, modern medicine, telecommunications and the internet are just some of the scientific innovations that have changed lives for the better.</p>
+              <p>On the other hand, sometimes scientists do research just in the hope of adding to their knowledge. While they should make absolutely sure that their experiments do no harm, they may not know until they have finished how their findings will be used and whether they will improve people's lives. The scientist Nobel invented dynamite to help with mining, not knowing that it would one day be used in weapons, and the scientist who discovered the life-saving drug penicillin did so quite by chance.</p>
+              <p>Overall, it seems that science should improve the lives of people and that ought to be one of its aims. However, knowledge and discovery are aims in themselves and are just as important for scientists...</p>
+            </div>
+
+            <h4 class="font-bold text-xs uppercase text-stone-900 mb-1">Official Examiner Commentary & Critique:</h4>
+            <ul class="text-xs text-stone-800 space-y-1 list-disc ml-4">
+              <li><strong>Task Response:</strong> Exceptionally well-developed response. Takes a nuanced position: agrees that human welfare is crucial, but argues discovery and knowledge are equally valid aims that cannot always be predicted.</li>
+              <li><strong>Examples:</strong> Strong, concrete illustrations (Nobel and dynamite, Fleming and penicillin, electricity, modern medicine).</li>
+              <li><strong>Coherence:</strong> Clear central topics in each paragraph, natural referencing, smooth transitions.</li>
+              <li><strong>Examiner Tip for 9.0:</strong> Vary introductory sentence linkers to avoid mechanical patterns like starting successive paragraphs with "On the one hand / On the other hand".</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="results-modal" class="fixed inset-0 z-50 modal-backdrop hidden overflow-y-auto flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full border-2 border-stone-300 flex flex-col max-h-[92vh] overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="cambridge-banner text-white px-6 py-4 flex justify-between items-center border-b-2 border-amber-400/50">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">IELTS Official Scoring Diagnostic</span>
+          <h2 class="text-xl font-bold">Cambridge 18 Academic Writing Assessment Report</h2>
+        </div>
+        <button onclick="closeModal()" class="text-gray-300 hover:text-white text-2xl font-bold px-2">&times;</button>
+      </div>
+
+      <!-- Modal Body (Printable & Exportable Diagnostic) -->
+      <div id="report-printable-area" class="p-6 overflow-y-auto space-y-6 text-stone-900 text-sm leading-relaxed">
+        
+        <!-- Candidate Summary Card -->
+        <div class="bg-[#faf7f2] border border-[#d5cbbe] p-4 rounded-lg flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-stone-500 font-bold">Candidate Assessment Session</div>
+            <div class="text-base font-bold text-stone-900" id="report-candidate-name">Academic Candidate #C18-T1</div>
+            <div class="text-xs text-stone-600" id="report-timestamp">Completed on: October 15, 2026</div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="text-center px-4 py-2 bg-white border border-stone-300 rounded shadow-sm">
+              <span class="block text-[10px] uppercase font-bold text-stone-500">Task 1 (1/3 wt)</span>
+              <span id="rep-band-t1" class="text-2xl font-bold text-stone-800">Band 6.5</span>
+            </div>
+            <div class="text-center px-4 py-2 bg-white border border-stone-300 rounded shadow-sm">
+              <span class="block text-[10px] uppercase font-bold text-stone-500">Task 2 (2/3 wt)</span>
+              <span id="rep-band-t2" class="text-2xl font-bold text-stone-800">Band 7.0</span>
+            </div>
+            <div class="text-center px-5 py-2 bg-[#731317] text-white rounded shadow border border-red-900">
+              <span class="block text-[10px] uppercase font-bold text-amber-200">Overall Band</span>
+              <span id="rep-band-overall" class="text-3xl font-extrabold text-white">7.0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border border-stone-300 rounded overflow-hidden">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-stone-100 border-b border-stone-300 font-bold uppercase tracking-wider text-stone-700">
+              <tr>
+                <th class="p-3 border-r border-stone-300 w-1/4">Assessment Criterion</th>
+                <th class="p-3 border-r border-stone-300 w-1/8 text-center">Task 1</th>
+                <th class="p-3 border-r border-stone-300 w-1/8 text-center">Task 2</th>
+                <th class="p-3">Automated Forensic Diagnostic Remarks</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-200">
+              <tr>
+                <td class="p-3 font-bold border-r border-stone-200 bg-stone-50">
+                  Task Achievement (T1) /<br>Task Response (T2)
+                </td>
+                <td id="score-ta-t1" class="p-3 text-center font-bold text-base border-r border-stone-200">6.5</td>
+                <td id="score-tr-t2" class="p-3 text-center font-bold text-base border-r border-stone-200">7.0</td>
+                <td id="notes-ta" class="p-3 text-stone-700">Evaluates word length, presence of clear overview, coverage of all 4 countries and timeframes for Task 1; thesis clarity and topic fulfillment for Task 2.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold border-r border-stone-200 bg-stone-50">Coherence & Cohesion (CC)</td>
+                <td id="score-cc-t1" class="p-3 text-center font-bold text-base border-r border-stone-200">6.5</td>
+                <td id="score-cc-t2" class="p-3 text-center font-bold text-base border-r border-stone-200">7.0</td>
+                <td id="notes-cc" class="p-3 text-stone-700">Paragraph organization, paragraph-to-paragraph logical flow, linking phrases, and cohesive reference markers.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold border-r border-stone-200 bg-stone-50">Lexical Resource (LR)</td>
+                <td id="score-lr-t1" class="p-3 text-center font-bold text-base border-r border-stone-200">7.0</td>
+                <td id="score-lr-t2" class="p-3 text-center font-bold text-base border-r border-stone-200">7.0</td>
+                <td id="notes-lr" class="p-3 text-stone-700">Academic lexical variety, demographic and trend vocabulary, formal collocations, and lexical density.</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold border-r border-stone-200 bg-stone-50">Grammatical Range & Accuracy (GRA)</td>
+                <td id="score-gra-t1" class="p-3 text-center font-bold text-base border-r border-stone-200">6.5</td>
+                <td id="score-gra-t2" class="p-3 text-center font-bold text-base border-r border-stone-200">7.0</td>
+                <td id="notes-gra" class="p-3 text-stone-700">Sentence structure diversity (complex, compound, conditional), punctuation, and accuracy across historical and predictive tenses.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Analytical Findings: Strengths, Weaknesses & Improvement Tips -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Strengths -->
+          <div class="bg-emerald-50/70 border border-emerald-300 rounded-lg p-3.5">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-emerald-950 flex items-center gap-1.5 mb-2">
+              <i class="fa-solid fa-circle-check text-emerald-700"></i>
+              <span>Demonstrated Strengths</span>
+            </h4>
+            <ul id="list-strengths" class="text-xs space-y-1.5 text-emerald-900 list-disc ml-4">
+              <li>Strong adherence to academic tone.</li>
+              <li>Clear separation of paragraphs.</li>
+            </ul>
+          </div>
+
+          <!-- Weaknesses -->
+          <div class="bg-rose-50/70 border border-rose-300 rounded-lg p-3.5">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-rose-950 flex items-center gap-1.5 mb-2">
+              <i class="fa-solid fa-triangle-exclamation text-rose-700"></i>
+              <span>Areas of Vulnerability</span>
+            </h4>
+            <ul id="list-weaknesses" class="text-xs space-y-1.5 text-rose-900 list-disc ml-4">
+              <li>Monitor grammatical accuracy on subject-verb agreements.</li>
+            </ul>
+          </div>
+
+          <!-- High-Band Strategy -->
+          <div class="bg-amber-50/70 border border-amber-300 rounded-lg p-3.5">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-amber-950 flex items-center gap-1.5 mb-2">
+              <i class="fa-solid fa-graduation-cap text-amber-700"></i>
+              <span>Band 8+ Tips & Tricks</span>
+            </h4>
+            <ul id="list-tips" class="text-xs space-y-1.5 text-amber-900 list-disc ml-4">
+              <li>In Task 1, synthesize trends rather than cataloging individual years consecutively.</li>
+              <li>In Task 2, integrate counter-examples organically rather than through generic connectors.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Word Document Export Info -->
+        <div class="bg-stone-100 p-3 rounded border border-stone-300 text-xs text-stone-700 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-file-word text-blue-700 text-lg"></i>
+            <span>Official Report Format: Formatted in <strong>Times New Roman 10pt</strong> with comprehensive tables, examiner breakdowns, and submitted essay transcriptions.</span>
+          </div>
+          <button onclick="downloadWordReport()" class="bg-[#1b263b] hover:bg-[#283852] text-white px-4 py-2 rounded font-bold text-xs flex items-center gap-2 shadow">
+            <i class="fa-solid fa-download"></i>
+            <span>Download .DOC Report</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-stone-100 px-6 py-3 border-t border-stone-200 flex justify-between items-center">
+        <button onclick="downloadWordReport()" class="bg-[#731317] hover:bg-[#8b181d] text-white px-4 py-1.5 rounded text-xs font-bold flex items-center gap-2 shadow">
+          <i class="fa-solid fa-file-arrow-down"></i>
+          <span>Save Complete Evaluation (.doc)</span>
+        </button>
+        <button onclick="closeModal()" class="px-4 py-1.5 bg-stone-300 hover:bg-stone-400 text-stone-800 rounded text-xs font-semibold">
+          Return to Exam View
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-stone-200 border-t border-stone-300 py-3 text-stone-600 text-xs text-center mt-6">
+    <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2">
+      <p>&copy; Cambridge Academic Writing Simulation Platform &bull; Volume 18 Test 1</p>
+      <div class="flex space-x-4">
+        <span>Task 1: Line Graph Urbanization</span>
+        <span>&bull;</span>
+        <span>Task 2: Science & Human Welfare</span>
+        <span>&bull;</span>
+        <span>Word Count Engine: Active</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <script>
+    /* --- State Management --- */
+    let timerDuration = 60 * 60; // 60 minutes in seconds
+    let timerRemaining = timerDuration;
+    let timerInterval = null;
+    let isTimerRunning = true;
+    let currentTask = 1;
+    let gradingResults = null;
+
+    /* Initialize on DOM Ready */
+    window.addEventListener('DOMContentLoaded', () => {
+      startTimer();
+      updateCounts();
+    });
+
+    /* --- Timer Functions --- */
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          renderTimerDisplay();
+          // Warning notifications at 20 min (Task 1 end recommendation) and 5 min
+          if (timerRemaining === 40 * 60) {
+            showToast('Time Check: 20 minutes elapsed. Recommended to transition to Writing Task 2.', 'info');
+          } else if (timerRemaining === 5 * 60) {
+            showToast('Warning: 5 minutes remaining. Conclude your essay and proofread.', 'warning');
+          }
+        } else {
+          clearInterval(timerInterval);
+          playExamChime();
+          showToast('Time is up! Submitting examination automatically.', 'warning');
+          submitExamination();
+        }
+      }, 1000);
+      isTimerRunning = true;
+      updateTimerControls();
+    }
+
+    function toggleTimer() {
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        showToast('Examination timer paused.', 'info');
+      } else {
+        startTimer();
+        showToast('Examination timer resumed.', 'info');
+      }
+      updateTimerControls();
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerRemaining = timerDuration;
+      renderTimerDisplay();
+      startTimer();
+      showToast('Timer reset to 60:00.', 'info');
+    }
+
+    function updateTimerControls() {
+      const icon = document.getElementById('timer-icon');
+      const status = document.getElementById('timer-status');
+      if (isTimerRunning) {
+        icon.className = 'fa-solid fa-pause';
+        status.textContent = 'Pause';
+      } else {
+        icon.className = 'fa-solid fa-play';
+        status.textContent = 'Resume';
+      }
+    }
+
+    function renderTimerDisplay() {
+      const minutes = Math.floor(timerRemaining / 60);
+      const seconds = timerRemaining % 60;
+      const displayStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      const timerEl = document.getElementById('exam-timer');
+      timerEl.textContent = displayStr;
+      
+      if (timerRemaining <= 300) {
+        timerEl.classList.remove('text-amber-400');
+        timerEl.classList.add('text-red-500', 'animate-pulse');
+      } else {
+        timerEl.classList.remove('text-red-500', 'animate-pulse');
+        timerEl.classList.add('text-amber-400');
+      }
+    }
+
+    /* --- Audio Synthesizer (No external media dependency) --- */
+    function playExamChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+      } catch (e) {
+        console.log('Audio chime unavailable', e);
+      }
+    }
+
+    function switchTask(taskId) {
+      currentTask = taskId;
+      const sec1 = document.getElementById('section-task1');
+      const sec2 = document.getElementById('section-task2');
+      const secBench = document.getElementById('section-benchmarks');
+
+      const btn1 = document.getElementById('btn-tab-task1');
+      const btn2 = document.getElementById('btn-tab-task2');
+      const btnBench = document.getElementById('btn-tab-benchmarks');
+
+      sec1.classList.add('hidden');
+      sec2.classList.add('hidden');
+      secBench.classList.add('hidden');
+
+      btn1.className = 'tab-btn text-stone-700 hover:text-stone-900 px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 border-transparent';
+      btn2.className = 'tab-btn text-stone-700 hover:text-stone-900 px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 border-transparent';
+      btnBench.className = 'tab-btn text-stone-700 hover:text-stone-900 px-5 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 border-transparent ml-auto';
+
+      if (taskId === 1) {
+        sec1.classList.remove('hidden');
+        btn1.className = 'tab-btn active px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2';
+      } else if (taskId === 2) {
+        sec2.classList.remove('hidden');
+        btn2.className = 'tab-btn active px-6 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2';
+      } else if (taskId === 3) {
+        secBench.classList.remove('hidden');
+        btnBench.className = 'tab-btn active px-5 py-2.5 rounded-t-md font-bold text-sm tracking-wide flex items-center gap-2 border-b-2 ml-auto';
+      }
+    }
+
+    /* Metrics Calculation (Word counts, paragraphs, sentences) */
+    function analyzeTextStats(text) {
+      if (!text || !text.trim()) {
+        return { words: 0, paras: 0, sentences: 0, avgSent: 0 };
+      }
+      const trimmed = text.trim();
+      const wordsArray = trimmed.match(/\b[a-zA-Z0-9'-]+\b/g) || [];
+      const words = wordsArray.length;
+      const paragraphs = trimmed.split(/\n+/).filter(p => p.trim().length > 0).length;
+      const sentencesArray = trimmed.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      const sentences = sentencesArray.length || 1;
+      const avgSent = words > 0 ? (words / sentences).toFixed(1) : 0;
+      return { words, paras: paragraphs, sentences, avgSent };
+    }
+
+    function updateCounts() {
+      const t1Text = document.getElementById('task1-essay').value;
+      const t2Text = document.getElementById('task2-essay').value;
+
+      const t1Stats = analyzeTextStats(t1Text);
+      const t2Stats = analyzeTextStats(t2Text);
+
+      // Task 1 DOM updates
+      document.getElementById('badge-t1-wc').textContent = `${t1Stats.words} words`;
+      document.getElementById('task1-word-count-badge').textContent = `Words: ${t1Stats.words} / 150`;
+      document.getElementById('t1-paras').textContent = t1Stats.paras;
+      document.getElementById('t1-sentences').textContent = t1Stats.sentences;
+      document.getElementById('t1-avg-sent').textContent = t1Stats.avgSent;
+
+      const t1Status = document.getElementById('t1-target-status');
+      if (t1Stats.words >= 150) {
+        t1Status.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> <span class="text-emerald-700">Minimum 150 words achieved</span>';
+        document.getElementById('task1-word-count-badge').className = 'px-2.5 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-900 border border-emerald-300';
+      } else {
+        const diff = 150 - t1Stats.words;
+        t1Status.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>${diff} words below 150 target</span>`;
+        document.getElementById('task1-word-count-badge').className = 'px-2.5 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300';
+      }
+
+      // Task 2 DOM updates
+      document.getElementById('badge-t2-wc').textContent = `${t2Stats.words} words`;
+      document.getElementById('task2-word-count-badge').textContent = `Words: ${t2Stats.words} / 250`;
+      document.getElementById('t2-paras').textContent = t2Stats.paras;
+      document.getElementById('t2-sentences').textContent = t2Stats.sentences;
+      document.getElementById('t2-avg-sent').textContent = t2Stats.avgSent;
+
+      const t2Status = document.getElementById('t2-target-status');
+      if (t2Stats.words >= 250) {
+        t2Status.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> <span class="text-emerald-700">Minimum 250 words achieved</span>';
+        document.getElementById('task2-word-count-badge').className = 'px-2.5 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-900 border border-emerald-300';
+      } else {
+        const diff = 250 - t2Stats.words;
+        t2Status.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>${diff} words below 250 target</span>`;
+        document.getElementById('task2-word-count-badge').className = 'px-2.5 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300';
+      }
+    }
+
+    /* SVG Chart Helper Functions */
+    function showTip(evt, text) {
+      const tooltip = document.getElementById('chart-tooltip');
+      tooltip.textContent = text;
+      tooltip.classList.remove('hidden');
+      const chartBox = document.getElementById('academic-line-chart').getBoundingClientRect();
+      const clientX = evt.clientX || (evt.touches ? evt.touches[0].clientX : 0);
+      const clientY = evt.clientY || (evt.touches ? evt.touches[0].clientY : 0);
+      tooltip.style.left = (clientX - chartBox.left + 10) + 'px';
+      tooltip.style.top = (clientY - chartBox.top - 28) + 'px';
+    }
+
+    function hideTip() {
+      document.getElementById('chart-tooltip').classList.add('hidden');
+    }
+
+    function toggleTrace(pathId) {
+      const path = document.getElementById(pathId);
+      if (path.style.opacity === '0.15') {
+        path.style.opacity = '1';
+      } else {
+        path.style.opacity = '0.15';
+      }
+    }
+
+    function evaluateExamSubmission(t1Text, t2Text) {
+      const t1Stats = analyzeTextStats(t1Text);
+      const t2Stats = analyzeTextStats(t2Text);
+
+      // --- Task 1 Criterion Scoring ---
+      let ta1 = 5.0, cc1 = 5.0, lr1 = 5.0, gra1 = 5.0;
+      const strengths = [];
+      const weaknesses = [];
+      const tips = [];
+
+      // 1. Task 1 - Task Achievement
+      const lowerT1 = t1Text.toLowerCase();
+      const hasOverview1 = /\b(overall|in summary|it is noticeable|it is clear that|general trend|broad pattern)\b/i.test(t1Text);
+      const countriesFound = ['malaysia', 'philippines', 'thailand', 'indonesia'].filter(c => lowerT1.includes(c)).length;
+      const numbersFound = (t1Text.match(/\b\d+(\.\d+)?%?\b/g) || []).length;
+      const hasProjection = /\b(2030|2040|project|predict|forecast|expect)\b/i.test(t1Text);
+
+      if (t1Stats.words >= 150) ta1 += 1.0;
+      else if (t1Stats.words < 120) ta1 -= 1.0;
+
+      if (hasOverview1) {
+        ta1 += 1.0;
+        strengths.push("Task 1 contains an explicit, well-positioned general overview highlighting key macro-trends.");
+      } else {
+        weaknesses.push("Task 1 lacks an explicit 'Overall' summary clause, capping Task Achievement at Band 5.");
+      }
+
+      if (countriesFound >= 3) ta1 += 0.5;
+      if (numbersFound >= 5 && hasProjection) {
+        ta1 += 0.5;
+        strengths.push("Task 1 accurately synthesizes historical milestones with predicted figures for 2030 and 2040.");
+      } else {
+        weaknesses.push("Task 1 could feature more precise numerical integration and projection vocabulary.");
+      }
+
+      // 2. Task 1 - Coherence & Cohesion
+      const t1Linkers = (t1Text.match(/\b(meanwhile|however|in contrast|whereas|while|respectively|furthermore|subsequently|after that)\b/gi) || []).length;
+      if (t1Stats.paras >= 3) cc1 += 1.0;
+      if (t1Linkers >= 3) cc1 += 0.5;
+      if (t1Linkers >= 6) cc1 += 0.5;
+
+      // 3. Task 1 - Lexical Resource
+      const t1Vocab = (t1Text.match(/\b(proportion|percentage|dwellers|urban|citizens|trajectory|surge|exponential|moderate|plateau|overtake|surpass|exceed|climb|rapidly|steadily|dramatic)\b/gi) || []).length;
+      if (t1Vocab >= 4) lr1 += 1.0;
+      if (t1Vocab >= 8) lr1 += 1.0;
+
+      // 4. Task 1 - Grammatical Range
+      const t1Complex = (t1Text.match(/\b(which|that|who|although|even though|having|being predicted|compared to|in comparison with)\b/gi) || []).length;
+      if (t1Complex >= 3) gra1 += 1.0;
+      if (t1Stats.sentences >= 6 && t1Stats.avgSent >= 14) gra1 += 0.5;
+
+      // Bound Task 1 criteria between 4.0 and 9.0
+      ta1 = Math.min(9, Math.max(4, Math.round(ta1 * 2) / 2));
+      cc1 = Math.min(9, Math.max(4, Math.round(cc1 * 2) / 2));
+      lr1 = Math.min(9, Math.max(4, Math.round(lr1 * 2) / 2));
+      gra1 = Math.min(9, Math.max(4, Math.round(gra1 * 2) / 2));
+      const bandTask1 = Math.round(((ta1 + cc1 + lr1 + gra1) / 4) * 2) / 2;
+
+      // --- Task 2 Criterion Scoring ---
+      let tr2 = 5.0, cc2 = 5.0, lr2 = 5.0, gra2 = 5.0;
+
+      // 1. Task 2 - Task Response
+      const lowerT2 = t2Text.toLowerCase();
+      const hasStance = /\b(i believe|in my opinion|this essay argues|i agree|i disagree|to a certain extent|in conclusion|my view)\b/i.test(t2Text);
+      const scienceKeywords = (lowerT2.match(/\b(science|scientific|discovery|invention|welfare|medicine|technol|knowledge|society|human|lives|experiment|serendipit|nobel|penicillin|research|curiosity)\b/g) || []).length;
+
+      if (t2Stats.words >= 250) tr2 += 1.0;
+      else if (t2Stats.words < 200) tr2 -= 1.0;
+
+      if (hasStance) {
+        tr2 += 1.0;
+        strengths.push("Task 2 establishes and maintains a clear thesis and examiner-facing point of view throughout.");
+      } else {
+        weaknesses.push("Task 2 stance is implicit or uncertain; ensure the Introduction immediately declares your position.");
+      }
+
+      if (scienceKeywords >= 10) {
+        tr2 += 0.5;
+        strengths.push("Task 2 engages effectively with philosophical and practical dimensions of scientific pursuit.");
+      } else {
+        weaknesses.push("Task 2 could expand on specific real-world manifestations of scientific endeavor.");
+      }
+
+      // 2. Task 2 - Coherence & Cohesion
+      const t2Linkers = (t2Text.match(/\b(on the one hand|on the other hand|furthermore|moreover|consequently|in addition|nevertheless|conversely|for instance|for example|ultimately)\b/gi) || []).length;
+      if (t2Stats.paras >= 4) {
+        cc2 += 1.0;
+        strengths.push("Appropriate 4-to-5 paragraph architectural framework (Introduction, 2 distinct Body arguments, Conclusion).");
+      }
+      if (t2Linkers >= 4) cc2 += 0.5;
+      if (t2Linkers >= 7) cc2 += 0.5;
+
+      // 3. Task 2 - Lexical Resource
+      const t2Vocab = (t2Text.match(/\b(humanitarian|utilitarian|breakthrough|ethical|advancement|fundamental|innovat|prerequisite|alleviat|tangible|speculative|serendipitous|empirical|profound)\b/gi) || []).length;
+      if (t2Vocab >= 3) lr2 += 1.0;
+      if (t2Vocab >= 7) lr2 += 1.0;
+
+      // 4. Task 2 - Grammatical Range
+      const t2Complex = (t2Text.match(/\b(if|unless|whereas|while|whilst|provided that|not only|but also|should|would|could have|it is argued)\b/gi) || []).length;
+      if (t2Complex >= 4) gra2 += 1.0;
+      if (t2Stats.avgSent >= 16 && t2Stats.sentences >= 10) gra2 += 0.5;
+
+      // Bound Task 2 criteria between 4.0 and 9.0
+      tr2 = Math.min(9, Math.max(4, Math.round(tr2 * 2) / 2));
+      cc2 = Math.min(9, Math.max(4, Math.round(cc2 * 2) / 2));
+      lr2 = Math.min(9, Math.max(4, Math.round(lr2 * 2) / 2));
+      gra2 = Math.min(9, Math.max(4, Math.round(gra2 * 2) / 2));
+      const bandTask2 = Math.round(((tr2 + cc2 + lr2 + gra2) / 4) * 2) / 2;
+
+      // IELTS Official Weighting: Task 1 weighs 1/3, Task 2 weighs 2/3
+      const rawWeighted = (bandTask1 * (1/3)) + (bandTask2 * (2/3));
+      // IELTS rounding rule: .25 rounds up to .5; .75 rounds up to next whole band
+      const fractionalPart = rawWeighted - Math.floor(rawWeighted);
+      let roundedBand;
+      if (fractionalPart < 0.25) {
+        roundedBand = Math.floor(rawWeighted);
+      } else if (fractionalPart >= 0.25 && fractionalPart < 0.75) {
+        roundedBand = Math.floor(rawWeighted) + 0.5;
+      } else {
+        roundedBand = Math.ceil(rawWeighted);
+      }
+
+      // Add Standardized Tips
+      tips.push("Task 1: Group countries exhibiting parallel trajectories (e.g., Malaysia and Indonesia's steep ascents vs Thailand's modest growth) into unified analytical paragraphs.");
+      tips.push("Task 1: Guard against tense inconsistency; employ past simple for 1970–2020 and probabilistic future structures ('is projected to', 'is forecasted to') for 2030 and 2040.");
+      tips.push("Task 2: Avoid starting consecutive body paragraphs with mechanical markers like 'On the one hand... On the other hand'; instead use topic-driven sentence openers.");
+      tips.push("Task 2: Ensure your concluding paragraph answers 'To what extent' with nuanced conviction rather than a mere restatement of the prompt.");
+
+      return {
+        task1: { ta: ta1, cc: cc1, lr: lr1, gra: gra1, band: bandTask1, stats: t1Stats, text: t1Text },
+        task2: { tr: tr2, cc: cc2, lr: lr2, gra: gra2, band: bandTask2, stats: t2Stats, text: t2Text },
+        overallBand: roundedBand.toFixed(1),
+        strengths,
+        weaknesses,
+        tips,
+        timestamp: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+    }
+
+    function submitExamination() {
+      const t1Text = document.getElementById('task1-essay').value;
+      const t2Text = document.getElementById('task2-essay').value;
+
+      if (!t1Text.trim() && !t2Text.trim()) {
+        showToast('Please type an answer or click "Load Exemplar Drafts" to grade.', 'warning');
+        return;
+      }
+
+      gradingResults = evaluateExamSubmission(t1Text, t2Text);
+
+      // Populate Report Values
+      document.getElementById('rep-band-t1').textContent = `Band ${gradingResults.task1.band.toFixed(1)}`;
+      document.getElementById('rep-band-t2').textContent = `Band ${gradingResults.task2.band.toFixed(1)}`;
+      document.getElementById('rep-band-overall').textContent = gradingResults.overallBand;
+
+      document.getElementById('score-ta-t1').textContent = gradingResults.task1.ta.toFixed(1);
+      document.getElementById('score-tr-t2').textContent = gradingResults.task2.tr.toFixed(1);
+
+      document.getElementById('score-cc-t1').textContent = gradingResults.task1.cc.toFixed(1);
+      document.getElementById('score-cc-t2').textContent = gradingResults.task2.cc.toFixed(1);
+
+      document.getElementById('score-lr-t1').textContent = gradingResults.task1.lr.toFixed(1);
+      document.getElementById('score-lr-t2').textContent = gradingResults.task2.lr.toFixed(1);
+
+      document.getElementById('score-gra-t1').textContent = gradingResults.task1.gra.toFixed(1);
+      document.getElementById('score-gra-t2').textContent = gradingResults.task2.gra.toFixed(1);
+
+      // Populate lists
+      const strList = document.getElementById('list-strengths');
+      strList.innerHTML = gradingResults.strengths.map(s => `<li>${s}</li>`).join('');
+
+      const wList = document.getElementById('list-weaknesses');
+      wList.innerHTML = gradingResults.weaknesses.map(w => `<li>${w}</li>`).join('');
+
+      const tipList = document.getElementById('list-tips');
+      tipList.innerHTML = gradingResults.tips.map(t => `<li>${t}</li>`).join('');
+
+      // Open Modal
+      document.getElementById('results-modal').classList.remove('hidden');
+      playExamChime();
+    }
+
+    function closeModal() {
+      document.getElementById('results-modal').classList.add('hidden');
+    }
+
+    function downloadWordReport() {
+      if (!gradingResults) {
+        showToast('Submit the exam first to generate your report.', 'warning');
+        return;
+      }
+
+      const r = gradingResults;
+      const t1 = r.task1;
+      const t2 = r.task2;
+
+      // Microsoft Word compatible HTML / MIME document structure
+      const wordHtml = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>Cambridge IELTS Academic 18 Test 1 Diagnostic Report</title>
+        <!--[if gte mso 9]>
+        <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+          @page {
+            size: A4;
+            margin: 2.0cm 2.0cm 2.0cm 2.0cm;
+          }
+          body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 10pt;
+            line-height: 1.35;
+            color: #111111;
+          }
+          h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15pt;
+            font-weight: bold;
+            color: #731317;
+            text-align: center;
+            margin-bottom: 2pt;
+          }
+          .subtitle {
+            text-align: center;
+            font-size: 9.5pt;
+            font-style: italic;
+            color: #444;
+            margin-bottom: 12pt;
+          }
+          h2 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11.5pt;
+            font-weight: bold;
+            color: #731317;
+            border-bottom: 1.5pt solid #731317;
+            margin-top: 14pt;
+            margin-bottom: 5pt;
+            padding-bottom: 2pt;
+          }
+          h3 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 10.5pt;
+            font-weight: bold;
+            margin-top: 8pt;
+            margin-bottom: 3pt;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6pt;
+            margin-bottom: 10pt;
+            font-size: 10pt;
+            font-family: 'Times New Roman', Times, serif;
+          }
+          th {
+            background-color: #f2ede4;
+            border: 1pt solid #666666;
+            padding: 5pt 7pt;
+            text-align: left;
+            font-weight: bold;
+          }
+          td {
+            border: 1pt solid #888888;
+            padding: 5pt 7pt;
+            vertical-align: top;
+          }
+          .band-badge {
+            font-weight: bold;
+            color: #731317;
+            font-size: 11pt;
+          }
+          .summary-box {
+            background-color: #faf7f2;
+            border: 1pt solid #c8beaf;
+            padding: 8pt 12pt;
+            margin-bottom: 12pt;
+          }
+          .submitted-box {
+            background-color: #fcfcfc;
+            border: 0.5pt solid #cccccc;
+            padding: 8pt;
+            font-style: normal;
+            margin-bottom: 8pt;
+          }
+          ul {
+            margin-top: 3pt;
+            margin-bottom: 6pt;
+            padding-left: 18pt;
+          }
+          li {
+            margin-bottom: 2.5pt;
+            font-size: 10pt;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>CAMBRIDGE ASSESSMENT ENGLISH &bull; DIAGNOSTIC REPORT</h1>
+        <div class="subtitle">IELTS Academic Volume 18 &bull; Test 1 Writing Tasks 1 &amp; 2 &bull; Comprehensive Examiner Evaluation</div>
+
+        <div class="summary-box">
+          <table style="border:none; margin:0; width:100%;">
+            <tr style="border:none;">
+              <td style="border:none; width:55%;">
+                <strong>Candidate ID:</strong> Academic Examinee #C18-T1<br>
+                <strong>Evaluation Date:</strong> ${r.timestamp}<br>
+                <strong>Test Module:</strong> Academic Writing (60-minute window)
+              </td>
+              <td style="border:none; width:45%; text-align:right;">
+                <strong style="font-size:12pt; color:#731317;">OVERALL BAND SCORE: ${r.overallBand}</strong><br>
+                <span>Task 1 Band: <strong>${t1.band.toFixed(1)}</strong> (1/3 Weight)</span><br>
+                <span>Task 2 Band: <strong>${t2.band.toFixed(1)}</strong> (2/3 Weight)</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>I. Official Assessment Rubric Breakdown</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 28%;">Assessment Category</th>
+              <th style="width: 14%; text-align:center;">Task 1 Score</th>
+              <th style="width: 14%; text-align:center;">Task 2 Score</th>
+              <th style="width: 44%;">Examiner Analysis &amp; Criterion Observations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Task Achievement (T1)<br>Task Response (T2)</strong></td>
+              <td style="text-align:center;" class="band-badge">${t1.ta.toFixed(1)}</td>
+              <td style="text-align:center;" class="band-badge">${t2.tr.toFixed(1)}</td>
+              <td>
+                Task 1 words: ${t1.stats.words} (min 150). Overview identified: ${t1.ta >= 6 ? 'Yes' : 'Needs reinforcement'}. Coverage of 4 Asian territories.<br>
+                Task 2 words: ${t2.stats.words} (min 250). Clear, sustained position and topic fulfillment.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Coherence &amp; Cohesion (CC)</strong></td>
+              <td style="text-align:center;" class="band-badge">${t1.cc.toFixed(1)}</td>
+              <td style="text-align:center;" class="band-badge">${t2.cc.toFixed(1)}</td>
+              <td>
+                Paragraphing structure: Task 1 (${t1.stats.paras} paras), Task 2 (${t2.stats.paras} paras). Evaluates transitions, referential cohesion, and logical sequencing.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Lexical Resource (LR)</strong></td>
+              <td style="text-align:center;" class="band-badge">${t1.lr.toFixed(1)}</td>
+              <td style="text-align:center;" class="band-badge">${t2.lr.toFixed(1)}</td>
+              <td>
+                Academic collocation accuracy, demographic trajectory expressions (Task 1) and scientific/philosophical lexicon (Task 2).
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Grammatical Range &amp; Accuracy (GRA)</strong></td>
+              <td style="text-align:center;" class="band-badge">${t1.gra.toFixed(1)}</td>
+              <td style="text-align:center;" class="band-badge">${t2.gra.toFixed(1)}</td>
+              <td>
+                Compound, complex, and conditional clauses. Handling of historical past (1970–2020) vs. forecasted futures (2030, 2040).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>II. Forensic Strengths, Weaknesses &amp; Improvement Plan</h2>
+        
+        <h3>Key Strengths Exhibited</h3>
+        <ul>
+          ${r.strengths.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+
+        <h3>Areas for Immediate Remediation</h3>
+        <ul>
+          ${r.weaknesses.map(w => `<li>${w}</li>`).join('')}
+        </ul>
+
+        <h3>High-Band Strategy &amp; Cambridge Examination Tips</h3>
+        <ul>
+          ${r.tips.map(t => `<li>${t}</li>`).join('')}
+        </ul>
+
+        <h2>III. Candidate Transcripts</h2>
+        
+        <h3>Writing Task 1 Response (${t1.stats.words} words)</h3>
+        <div class="submitted-box">
+          ${t1.text.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>') || '<em>[No response provided]</em>'}
+        </div>
+
+        <h3>Writing Task 2 Response (${t2.stats.words} words)</h3>
+        <div class="submitted-box">
+          ${t2.text.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>') || '<em>[No response provided]</em>'}
+        </div>
+
+        <div style="font-size: 8pt; text-align:center; color:#777; margin-top:20pt; border-top:0.5pt solid #ccc; padding-top:4pt;">
+          Cambridge Academic Writing Simulator &bull; Times New Roman 10pt Diagnostic Specification &bull; Generated Automatically
+        </div>
+      </body>
+      </html>
+      `;
+
+      // Trigger instant browser download via Blob
+      const blob = new Blob(['\ufeff', wordHtml], {
+        type: 'application/msword'
+      });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = `IELTS_Academic18_Test1_Diagnostic_Report_${new Date().toISOString().slice(0,10)}.doc`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(url);
+
+      showToast('Word document diagnostic report successfully downloaded.', 'success');
+    }
+
+    function loadSampleDrafts() {
+      // High-standard paraphrased exemplar for Task 1
+      const sampleT1 = 
+`The line graph depicts the percentage of the population residing in urban settlements across four Southeast Asian countries—Malaysia, the Philippines, Indonesia, and Thailand—from 1970 to 2020, alongside forecasted projections extending to 2040.
+
+Overall, it is immediately apparent that all four nations exhibit an upward trajectory in their urban demographics over the entire seventy-year period. While Malaysia consistently maintains the highest urban proportion from 1980 onward, Thailand remains the least urbanised country despite steady growth.
+
+In 1970, the Philippines had the largest urban populace at approximately 32%, closely followed by Malaysia at 30%, whereas Thailand and Indonesia stood at 18% and 13% respectively. However, Malaysia experienced rapid urbanization, climbing steeply to around 77% by 2020 and is projected to reach a peak of 84% by 2040. Similarly, Indonesia demonstrated significant acceleration from 1990 onwards, rising from 25% to 52% in 2020, and is forecasted to reach 64% in 2040, overtaking both Thailand and the Philippines.
+
+Conversely, the Philippines fluctuated moderately; after rising to 48% in 1990, it dipped slightly before recovering to 45% in 2020, with expectations of reaching 56% by 2040. Thailand experienced modest, sustained growth, hovering near 30% between 1990 and 2020, and is anticipated to reach 50% by the end of the projection timeframe.`;
+
+      // Cambridge-aligned High-scoring essay for Task 2
+      const sampleT2 = 
+`Rapid technological and scientific advancements characterize contemporary society, yet debate persists regarding the foundational objective of scientific endeavor. While many argue that the primary aim of science must exclusively be the direct enhancement of human welfare, I believe that while improving people's lives is an indispensable ethical objective, the unrestricted pursuit of foundational knowledge and serendipitous curiosity are equally critical aims.
+
+On the one hand, a compelling argument supports prioritizing the public good above all else. Humanity continues to confront pressing existential threats, including malignant diseases, climate degradation, and poverty. When scientific talent and funding are targeted toward humanitarian solutions, transformative breakthroughs occur. For example, the development of modern pharmaceuticals, sanitation infrastructure, and renewable energy technologies has demonstrably eradicated illnesses and elevated global living standards. From this perspective, science derives its moral legitimacy by serving as an instrument for human advancement and alleviation of suffering.
+
+On the other hand, restricting scientific exploration strictly to predetermined utilitarian applications can severely truncate human progress. Historically, some of the most monumental scientific discoveries arose not from direct attempts to solve an immediate problem, but through serendipity and pure theoretical curiosity. Alexander Fleming's discovery of penicillin occurred inadvertently while investigating bacterial properties, and Albert Einstein’s conceptual work on relativity laid the groundwork for modern satellite navigation without any initial intention to improve daily conveniences. Furthermore, Alfred Nobel developed dynamite to facilitate safer quarry mining, only for unforeseen applications to alter its humanitarian profile. Scientists cannot invariably forecast how theoretical investigations will eventually materialize.
+
+In conclusion, although improving the quality of human life must remain a core guiding priority for applied science, the pursuit of fundamental understanding is a noble and vital aim in itself. A balanced approach that honors both humanitarian imperatives and free scientific exploration is essential for enduring global progress.`;
+
+      document.getElementById('task1-essay').value = sampleT1;
+      document.getElementById('task2-essay').value = sampleT2;
+      updateCounts();
+      showToast('Cambridge exemplar responses loaded into both tasks!', 'success');
+    }
+
+    function clearAllDrafts() {
+      document.getElementById('task1-essay').value = '';
+      document.getElementById('task2-essay').value = '';
+      updateCounts();
+      showToast('Answer sheets cleared.', 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      let borderClass = 'border-stone-400 bg-stone-900 text-white';
+      let icon = '<i class="fa-solid fa-circle-info text-sky-400"></i>';
+
+      if (type === 'success') {
+        borderClass = 'border-emerald-700 bg-stone-900 text-white';
+        icon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+      } else if (type === 'warning') {
+        borderClass = 'border-amber-600 bg-stone-900 text-white';
+        icon = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>';
+      }
+
+      toast.className = `p-3 rounded shadow-xl text-xs flex items-center gap-2 border ${borderClass} transition-all duration-300 transform translate-y-2 opacity-0 max-w-sm`;
+      toast.innerHTML = `${icon} <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 20);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4200);
+    }
+  </script>
+</body>
+</html>
